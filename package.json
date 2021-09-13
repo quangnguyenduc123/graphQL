@@ -1,0 +1,17 @@
+{
+  "name": "graphql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "typescript": "^4.4.3"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.1",
+    "nodemon": "^2.0.12"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "concurrently \"tsc -w\" \"nodemon -w dist -q dist/index.js\""
+  }
+}
