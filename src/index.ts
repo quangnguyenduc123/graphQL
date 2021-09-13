@@ -1,52 +1,24 @@
-interface A {
-    someProp: number
+// Functions [optional and default parameters]
+
+function sum(a: number, b: number): number {
+    return a + b
 }
 
-interface B {
-    someProp: number
+type MyFunc = (a: number, b: number) => number
+const sum2: MyFunc = (a, b) => a + b
+
+// a has default value is 0, can't have both optional and default in 1 parameter
+function opt(a: number = 0, b?: number) {
+    return a + (b || 0) // coz b can be null
 }
 
-let a: A = { someProp: 1 }
-let b: B = a // if add another property in B => cant convert
+// Overloads
 
-interface Profile {
-    readonly name: string // cant modify name
-    age?: number // => make age optional => profile variable bellow dont have declare age
+function calcArea(width: number, height: number): number
+function calcArea(length: number): number
+function calcArea(...args: number[]): number {
+    if (args.length === 2) {
+        return args[0] + args[1]
+    }
+    return args[0]
 }
-
-let profile: Profile = {
-    name: 'John'
-}
-
-// Index Signature => help to describe dynamic properties
-interface Signature {
-    [key: string]: number
-    //someProp: string => we can't decalare another property with another type => someProp have to be number
-    someProp: number
-}
-
-const sig: Signature = { someProp: 3 }
-sig.x = 1
-sig.y = 2
-
-//Call signature: to describe functions
-interface Sum {
-    (a: number, b: number): number
-    prop1: string
-}
-
-const sum: Sum = (a, b) => a + b
-sum.prop1 = 'a'
-
-// Extending Interface
-interface Parent {
-    x: string
-}
-
-interface Parent2 {
-    y: string
-}
-
-interface Child extends Parent, Parent2 { }
-
-let child: Child = { x: 'some prop', y: 'another prop' }
