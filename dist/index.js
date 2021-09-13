@@ -1,53 +1,12 @@
 "use strict";
-var _a;
-// Boolean
-var b = true;
-//Number
-var num = 1 + 1 + 1 + 0x1;
-//String
-var hello = 'Hello';
-// Null and Undefined
-var n = null;
-var u = undefined;
-function uppercaseFirstLetter(str) {
-    // coz str maybe null => have to check, coz we set Strict in ts.config: true => error when writting
-    if (str)
-        return str[0].toUpperCase() + str.substr(1);
-}
-uppercaseFirstLetter(null);
-// Void
-function log(message) {
-    console.log(message);
-    //return message => can't return in void function
-}
-// Array 
-var arr1 = ['a', 'b'];
-var arr2 = ['a', 'b'];
-//Tuple  arr with fixed length. variety of types
-var tuple = ['a', 1];
-tuple.push('abc'); // but we can't redeclare tuple = ['a', 1, 'abc']
-// Enum, when not intialize value => value of enum increase +1 from 0, if Enum init with another type => have to init all values
-var Color;
-(function (Color) {
-    Color[Color["Red"] = 0] = "Red";
-    Color[Color["Green"] = 1] = "Green";
-    Color[Color["Blue"] = 2] = "Blue";
-})(Color || (Color = {}));
-var favoriteColor = Color.Blue;
-console.log(Color[2]); // cant look up if value is string
-// Type Assertions
-// const email = document.getElementById('email') // if we dont assert type => email can be null => cant access addEventListener or have to put ? or !
-// email?.addEventListener('change', e => { // ! means email cant be null => non null assertion operator
-//     const input = e.target as HTMLInputElement  // cur
-//     console.log(input.value)
-// })
-function test() {
-    return {
-        name: 'Alice',
-        cat: {
-            name: 'Dinah'
-        }
-    };
-}
-var test1 = test();
-console.log((_a = test1.dog) === null || _a === void 0 ? void 0 : _a.name);
+var a = { someProp: 1 };
+var b = a; // if add another property in B => cant convert
+var profile = {
+    name: 'John'
+};
+var sig = { someProp: 3 };
+sig.x = 1;
+sig.y = 2;
+var sum = function (a, b) { return a + b; };
+sum.prop1 = 'a';
+var child = { x: 'some prop', y: 'another prop' };
