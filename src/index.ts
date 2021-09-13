@@ -1,24 +1,59 @@
-// Functions [optional and default parameters]
+class Robot {
+    // instance site
+    _color?: string
+    _name: string
 
-function sum(a: number, b: number): number {
-    return a + b
-}
-
-type MyFunc = (a: number, b: number) => number
-const sum2: MyFunc = (a, b) => a + b
-
-// a has default value is 0, can't have both optional and default in 1 parameter
-function opt(a: number = 0, b?: number) {
-    return a + (b || 0) // coz b can be null
-}
-
-// Overloads
-
-function calcArea(width: number, height: number): number
-function calcArea(length: number): number
-function calcArea(...args: number[]): number {
-    if (args.length === 2) {
-        return args[0] + args[1]
+    // Static site: static method, static property, constructor
+    static availableColors = ['green', 'yellow']
+    static isColorAvailable(color: string) {
+        return Robot.availableColors.includes(color)
     }
-    return args[0]
+
+    constructor(name: string) {
+        this._name = name
+    }
+
+    askName() {
+        console.log(`My name is ${this._name}`)
+    }
+
+    move(distance: number) {
+        console.log(`${this._name} moved ${distance} km`)
+    }
+
+    // set method name(name is same with object.name bellow)
+    set name(value: string) {
+        this._name = 'PREFIX_' + value
+    }
+
+    // get method
+    get name() {
+        return this._name + '_SUFFIX'
+    }
+
+    set color(color: string) {
+        if (!Robot.isColorAvailable(color)) {
+            throw new Error('not vailable')
+        }
+        this._color = color
+    }
 }
+
+class FlyingRobot extends Robot {
+    private readonly jetpakcSize: number // only init in constructor, cant rewrite in others
+
+    constructor(name: string, jetpackSize: number) {
+        super(name)
+        this.jetpakcSize = jetpackSize
+    }
+
+    move(distance: number) {
+        console.log(`${this._name} is flying`)
+        super.move(distance)
+    }
+}
+
+const fylingRobot = new FlyingRobot('Jim', 2)
+fylingRobot.move(10)
+fylingRobot.name = 'Quang'
+console.log(`my name is ${fylingRobot.name}`) // => PREFIX_Quang_Suffix
