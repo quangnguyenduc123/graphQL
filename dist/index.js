@@ -1,4 +1,5 @@
 "use strict";
+var _a;
 // Boolean
 var b = true;
 //Number
@@ -33,7 +34,20 @@ var Color;
     Color[Color["Blue"] = 2] = "Blue";
 })(Color || (Color = {}));
 var favoriteColor = Color.Blue;
-console.log(Color[2]);
+console.log(Color[2]); // cant look up if value is string
 // Type Assertions
-var email = document.getElementById('email');
-email === null || email === void 0 ? void 0 : email.addEventListener();
+// const email = document.getElementById('email') // if we dont assert type => email can be null => cant access addEventListener or have to put ? or !
+// email?.addEventListener('change', e => { // ! means email cant be null => non null assertion operator
+//     const input = e.target as HTMLInputElement  // cur
+//     console.log(input.value)
+// })
+function test() {
+    return {
+        name: 'Alice',
+        cat: {
+            name: 'Dinah'
+        }
+    };
+}
+var test1 = test();
+console.log((_a = test1.dog) === null || _a === void 0 ? void 0 : _a.name);

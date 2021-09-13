@@ -51,3 +51,15 @@ email?.addEventListener('change', e => { // ! means email cant be null => non nu
     const input = e.target as HTMLInputElement  // cur
     console.log(input.value)
 })
+
+function test(): any {
+    return {
+        name: 'Alice',
+        cat: {
+            name: 'Dinah'
+        }
+    };
+}
+const test1 = test();
+console.log(test1.dog?.name) // => console log undefine
+console.log(test1.dog!.name) // runtime error
