@@ -1,71 +1,93 @@
-// MERGE INTERFACE
-interface Cart {
-    calculateTotal(): number
+interface Starship {
+    name: string,
+    enableHyperjump: boolean
 }
 
-interface Cart {
-    x: number
+// if we define: starship: StarShip => updateStarship require both name and enableHyperjump
+// we just we update only 1 property => use Partial  => all properties of Starship becomes optional
+const updateStarship = (id: number, starship: Partial<Starship>) => {
 }
 
-interface Cart {
-    calculateTotal(options: { discountCode: number }): number
-}
+updateStarship(1, {
+    name: 'Explorer'
+})
 
-let myCart: Cart = {
-    x: 1,
-    // coz Coz interface with method calculateTotal has 2 version: 1 no options, 2 has => options ?
-    calculateTotal(options?: { discountCode: number }) {
-
-        return 1
+const starships: Record<string, Starship> = {
+    Explorer1: {
+        name: "Explorer1",
+        enableHyperjump: true
+    },
+    Explorer2: {
+        name: "Explorer2",
+        enableHyperjump: false
     }
 }
 
-// MERGE NAMESPACE
-namespace MyNamespace {
-    export const x: number = 10
-    export interface SomeInterface {
-        y: number
+type StarshipNameOnly = Pick<Starship, 'name'>
+
+type StarshipWithoutName = Omit<Starship, 'name'>
+
+type AvailableDrinks = 'Coffee' | 'Tea' | 'Lemonade'
+type DrinkDoesntLike = 'Coffee' | 'Tea'
+type DrinkLike = 'Tea'
+let myDrink: Exclude<AvailableDrinks, DrinkDoesntLike> // => Lemonade
+
+let anotherDrink: Extract<DrinkLike, AvailableDrinks>
+
+interface StarShipProperties {
+    color?: 'blue' | 'red' | 'green'
+}
+
+function paintStarShip(
+    id: number,
+    color: NonNullable<StarShipProperties['color']>
+) {
+    return {
+        id,
+        color
+    }
+}
+type PaintStarShipReturn = ReturnType<typeof paintStarShip>
+paintStarShip(1, 'green')
+
+
+type Constructable<ClassInstance> = new (...args: any[]) => ClassInstance
+
+function Deletable<BaseClass extends Constructable<{}>>(Base: BaseClass) {
+    return class extends Base {
+        deleted?: boolean
+        delete() { }
     }
 }
 
-namespace MyNamespace {
-    export const getX = () => x
-    export interface SomeInterface {
-        x: number
+class Car {
+    deleted?: boolean
+    delete() { }
+    constructor(public name: string) { }
+}
+
+class User {
+    deleted?: boolean
+    delete() { }
+    constructor(public name: string) { }
+}
+
+
+interface MyObject {
+    sayHello(): void
+}
+
+interface MyObjectThis {
+    helloWorld(): string
+}
+
+const myObject: MyObject & ThisType<MyObjectThis> = {
+    sayHello() {
+        return this.helloWorld()
     }
 }
-
-const someInterface: MyNamespace.SomeInterface = {
-    x: 1,
-    y: 2
-}
-
-
-// Merge Function
-function someFunction(){
-    return 10
-}
-namespace someFunction {
-    export const someProperty = 20
-}
-console.log(someFunction.someProperty)
-console.log(someFunction())
-
-// ADD Static member to enum
-enum Vegetables{
-    Tomato = 'tomato',
-    Onion = 'onion'
-}
-namespace Vegetables {
-    export function makeSalad(){
-        return Vegetables.Tomato + Vegetables.Onion
+myObject.sayHello = myObject.sayHello.bind({
+    helloWorld() {
+        return 'Hello World'
     }
-}
-
-// extends class
-class Salad {}
-namespace Salad{
-    export const availableDressings = ['olive oil', 'yoghurt']
-}
-Salad.availableDressings.includes('olive oil')
-
+})
