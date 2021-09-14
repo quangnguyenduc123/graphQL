@@ -1,30 +1,71 @@
-interface IA {
-    a: number
+// MERGE INTERFACE
+interface Cart {
+    calculateTotal(): number
 }
 
-interface IB {
-    b: number
+interface Cart {
+    x: number
 }
 
-function X(obj: IA & IB) {
-    return obj.a + obj.b
+interface Cart {
+    calculateTotal(options: { discountCode: number }): number
 }
 
-function combine(objA, objB) {
-    return { ...objA, ...objB }
+let myCart: Cart = {
+    x: 1,
+    // coz Coz interface with method calculateTotal has 2 version: 1 no options, 2 has => options ?
+    calculateTotal(options?: { discountCode: number }) {
+
+        return 1
+    }
 }
 
-const objA = { a: 1 }
-const objB = { b: 2 }
-const result = combine(objA, objB) // =< result will be any type => not good
-console.log(result)
-
-// Now object return has combination of ObjA and ObjB, explicit that argument is object, return a combine object
-function combineFix<ObjA extends object, ObjB extends object>(objA: ObjA, objB: ObjB): ObjA & ObjB {
-    return { ...objA, ...objB }
+// MERGE NAMESPACE
+namespace MyNamespace {
+    export const x: number = 10
+    export interface SomeInterface {
+        y: number
+    }
 }
-const objAFix = { a: 1 }
-const objBFix = { b: 2 }
-const resultFix = combineFix(objA, objB)
-console.log(resultFix)
+
+namespace MyNamespace {
+    export const getX = () => x
+    export interface SomeInterface {
+        x: number
+    }
+}
+
+const someInterface: MyNamespace.SomeInterface = {
+    x: 1,
+    y: 2
+}
+
+
+// Merge Function
+function someFunction(){
+    return 10
+}
+namespace someFunction {
+    export const someProperty = 20
+}
+console.log(someFunction.someProperty)
+console.log(someFunction())
+
+// ADD Static member to enum
+enum Vegetables{
+    Tomato = 'tomato',
+    Onion = 'onion'
+}
+namespace Vegetables {
+    export function makeSalad(){
+        return Vegetables.Tomato + Vegetables.Onion
+    }
+}
+
+// extends class
+class Salad {}
+namespace Salad{
+    export const availableDressings = ['olive oil', 'yoghurt']
+}
+Salad.availableDressings.includes('olive oil')
 
