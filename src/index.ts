@@ -1,43 +1,30 @@
-function someFn(myArgument: number | string) {
-    if (typeof myArgument === 'string') { //ts doesnt know x is number or string => check typeof
-        let x = myArgument.toUpperCase()
-    }
-    else {
-        myArgument.toFixed()
-    }
-}
-// Type guard with interface
-interface Dog {
-    bark(): void
-    walk(): void
+interface IA {
+    a: number
 }
 
-interface Cat {
-    meow(): void
-    walk(): void
+interface IB {
+    b: number
 }
 
-function isDog(someObj: Dog | Cat): someObj is Dog {
-    return 'bark' in someObj
+function X(obj: IA & IB) {
+    return obj.a + obj.b
 }
 
-function callMyPet(pet: Dog | Cat) {
-    pet.walk()
-    if (isDog(pet)) {
-        pet.bark()
-    }
-    else {
-        pet.meow()
-    }
+function combine(objA, objB) {
+    return { ...objA, ...objB }
 }
 
-//Type guard with class
-class A {
-    a: number;
+const objA = { a: 1 }
+const objB = { b: 2 }
+const result = combine(objA, objB) // =< result will be any type => not good
+console.log(result)
+
+// Now object return has combination of ObjA and ObjB, explicit that argument is object, return a combine object
+function combineFix<ObjA extends object, ObjB extends object>(objA: ObjA, objB: ObjB): ObjA & ObjB {
+    return { ...objA, ...objB }
 }
-class B {
-    b: number;
-}
-function simplify(value: A | B) {
-    return value instanceof A ? value.a : value.b;
-}
+const objAFix = { a: 1 }
+const objBFix = { b: 2 }
+const resultFix = combineFix(objA, objB)
+console.log(resultFix)
+
