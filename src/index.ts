@@ -2,4 +2,9 @@ function log(str: string){
     console.log(str)
 }
 
-log('Hello world 123')
+class A {
+    greeting = 'Hello DMCS'
+}
+
+
+log(new A().greeting)
