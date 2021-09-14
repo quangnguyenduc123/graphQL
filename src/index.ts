@@ -1,9 +1,47 @@
-import { ShoppingCart } from './shopping-cart'
-import { calculateTotalAmount } from './calculate-total-amout'
-import { Order } from './order'
+interface Animal {
+    name: string
+    group: string | undefined
+    setGroup(group: string): void
+}
 
-const cart = new ShoppingCart()
-console.log(`The cart's total is ${calculateTotalAmount(cart)}`)
+class Cat implements Animal {
+    name: string
+    group: string | undefined
 
-const order = new Order
-console.log(`The order's total is ${calculateTotalAmount(cart)}`)
+    constructor(name: string) {
+        this.name = name
+    }
+
+    setGroup(group: string) {
+        this.group = group
+    }
+}
+
+class Dog implements Animal {
+    name: string
+    group: string | undefined
+
+    constructor(name: string) {
+        this.name = name
+    }
+
+    setGroup(group: string) {
+        this.group = group
+    }
+
+    bark() { }
+}
+
+interface AnimalConstructor<T> {
+    new(name: string): T
+}
+
+function initializeAnimal<T extends Animal>(Animal: AnimalConstructor<T>, name: string) {
+    const animal = new Animal(name)
+    animal.setGroup('mammals')
+    return animal
+}
+
+const cat = initializeAnimal(Cat, 'Felix')
+const dog = initializeAnimal(Dog, 'Ava')
+dog.bark()// coz dog is Animal type, doesnt have bark in Dog => use Generic
