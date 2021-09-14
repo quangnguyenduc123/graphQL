@@ -12,6 +12,6 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "concurrently \"tsc -w\" \"nodemon -w dist -q dist/index.js\""
+    "dev": "concurrently \"tsc -w\" \"nodemon -w out -q out/index.js\""
   }
 }
