@@ -1,7 +1,9 @@
-type Properties = 'propA' | 'propB'
+type SomeType = string
+type MyConditionalType = SomeType extends string ? string : null
 
-type MyMappedType<T> = {
-    [P in keyof T]: T[P]
+function someFunction<T>(value: T) {
+    type A = T extends boolean ? 'TYPE A' : T extends string ? 'TYPE B' : T extends number ? 'TYPE C' : 'TYPE D'
+    const someOtherFunction = (someArg: T extends boolean ? 'TYPE A' : 'TYPE B') => { }
+    return someFunction
 }
 
-type MyNewType = MyMappedType<{ a: 'a', b: 'b' }>
