@@ -1,47 +1,57 @@
-interface Animal {
-    name: string
-    group: string | undefined
-    setGroup(group: string): void
+interface Expirable {
+    expiryDate: Date
 }
 
-class Cat implements Animal {
-    name: string
-    group: string | undefined
+interface ChocolateCake extends Expirable {
 
-    constructor(name: string) {
-        this.name = name
+}
+
+interface VanillaCake extends Expirable { }
+
+const chocoCakes: ChocolateCake[] = [
+    { expiryDate: new Date() }
+]
+
+const vanillaCakes: VanillaCake[] = [
+    { expiryDate: new Date() }
+]
+
+// if we have only T => item.expiryDate cant be known => extends Expirable
+const getExpiredItems = <T extends Expirable>(items: Array<T>) => {
+    const currentDate = new Date().getTime()
+    return items.filter(item => item.expiryDate.getDate() < currentDate)
+}
+
+const expiredChocoCakes = getExpiredItems(chocoCakes)
+const expiredVanillaCakes = getExpiredItems(vanillaCakes)
+
+// method 2: Create interface generic funtion
+interface getExpiredItemsFunction {
+    <T extends Expirable>(items: Array<T>): Array<T>
+}
+const getExpiredItems2: getExpiredItemsFunction = (items) => {
+    const currentDate = new Date().getTime()
+    return items.filter(item => item.expiryDate.getDate() < currentDate)
+}
+
+
+interface ShoppingCart<ItemId, Item> {
+    items: Array<Item>
+    addItem(this: ShoppingCart<ItemId, Item>, item: Item): void
+    getItemById(this: ShoppingCart<ItemId, Item>, id: ItemId): Item | undefined
+}
+
+interface Item {
+    id: number
+    price: number
+}
+
+const cart: ShoppingCart<number, Item> = {
+    items: [],
+    addItem(item) {
+        this.items.push(item)
+    },
+    getItemById(id) {
+        return this.items.find(item => item.id === id)
     }
-
-    setGroup(group: string) {
-        this.group = group
-    }
 }
-
-class Dog implements Animal {
-    name: string
-    group: string | undefined
-
-    constructor(name: string) {
-        this.name = name
-    }
-
-    setGroup(group: string) {
-        this.group = group
-    }
-
-    bark() { }
-}
-
-interface AnimalConstructor<T> {
-    new(name: string): T
-}
-
-function initializeAnimal<T extends Animal>(Animal: AnimalConstructor<T>, name: string) {
-    const animal = new Animal(name)
-    animal.setGroup('mammals')
-    return animal
-}
-
-const cat = initializeAnimal(Cat, 'Felix')
-const dog = initializeAnimal(Dog, 'Ava')
-dog.bark()// coz dog is Animal type, doesnt have bark in Dog => use Generic
