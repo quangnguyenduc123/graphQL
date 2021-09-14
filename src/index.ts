@@ -1,57 +1,43 @@
-interface Expirable {
-    expiryDate: Date
-}
-
-interface ChocolateCake extends Expirable {
-
-}
-
-interface VanillaCake extends Expirable { }
-
-const chocoCakes: ChocolateCake[] = [
-    { expiryDate: new Date() }
-]
-
-const vanillaCakes: VanillaCake[] = [
-    { expiryDate: new Date() }
-]
-
-// if we have only T => item.expiryDate cant be known => extends Expirable
-const getExpiredItems = <T extends Expirable>(items: Array<T>) => {
-    const currentDate = new Date().getTime()
-    return items.filter(item => item.expiryDate.getDate() < currentDate)
-}
-
-const expiredChocoCakes = getExpiredItems(chocoCakes)
-const expiredVanillaCakes = getExpiredItems(vanillaCakes)
-
-// method 2: Create interface generic funtion
-interface getExpiredItemsFunction {
-    <T extends Expirable>(items: Array<T>): Array<T>
-}
-const getExpiredItems2: getExpiredItemsFunction = (items) => {
-    const currentDate = new Date().getTime()
-    return items.filter(item => item.expiryDate.getDate() < currentDate)
-}
-
-
-interface ShoppingCart<ItemId, Item> {
-    items: Array<Item>
-    addItem(this: ShoppingCart<ItemId, Item>, item: Item): void
-    getItemById(this: ShoppingCart<ItemId, Item>, id: ItemId): Item | undefined
-}
-
-interface Item {
-    id: number
-    price: number
-}
-
-const cart: ShoppingCart<number, Item> = {
-    items: [],
-    addItem(item) {
-        this.items.push(item)
-    },
-    getItemById(id) {
-        return this.items.find(item => item.id === id)
+function someFn(myArgument: number | string) {
+    if (typeof myArgument === 'string') { //ts doesnt know x is number or string => check typeof
+        let x = myArgument.toUpperCase()
     }
+    else {
+        myArgument.toFixed()
+    }
+}
+// Type guard with interface
+interface Dog {
+    bark(): void
+    walk(): void
+}
+
+interface Cat {
+    meow(): void
+    walk(): void
+}
+
+function isDog(someObj: Dog | Cat): someObj is Dog {
+    return 'bark' in someObj
+}
+
+function callMyPet(pet: Dog | Cat) {
+    pet.walk()
+    if (isDog(pet)) {
+        pet.bark()
+    }
+    else {
+        pet.meow()
+    }
+}
+
+//Type guard with class
+class A {
+    a: number;
+}
+class B {
+    b: number;
+}
+function simplify(value: A | B) {
+    return value instanceof A ? value.a : value.b;
 }
