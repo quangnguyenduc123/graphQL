@@ -1,9 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-
-const App = () => {
-    (window as any).hello()
-    return <div>Hello world</div>
-}
+import App from './components/App'
+import '../src/styles/main.css'
 
 ReactDOM.render(<App/>, document.getElementById('root'))
