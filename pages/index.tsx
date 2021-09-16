@@ -1,7 +1,7 @@
-import Head from "next/head";
-import { gql, useQuery } from "@apollo/client";
-import styles from "../styles/Home.module.css";
-import { initializeApollo } from "../lib/client";
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+import { gql, useQuery } from '@apollo/client';
+import { initializeApollo } from '../lib/client';
 
 const TasksQueryDocument = gql`
   query Tasks {
@@ -14,16 +14,13 @@ const TasksQueryDocument = gql`
 `;
 
 interface TasksQuery {
-  tasks: {
-    id: number;
-    title: string;
-    status: string;
-  }[];
+  tasks: { id: number; title: string; status: string }[];
 }
 
 export default function Home() {
   const result = useQuery<TasksQuery>(TasksQueryDocument);
   const tasks = result.data?.tasks;
+
   return (
     <div className={styles.container}>
       <Head>
@@ -33,7 +30,11 @@ export default function Home() {
       {tasks &&
         tasks.length > 0 &&
         tasks.map((task) => {
-          return <div key={task.id}>{task.title}</div>;
+          return (
+            <div key={task.id}>
+              {task.title} ({task.status})
+            </div>
+          );
         })}
     </div>
   );
@@ -48,7 +49,7 @@ export const getStaticProps = async () => {
 
   return {
     props: {
-      initializeApollo: apolloClient.cache.extract(),
+      initialApolloState: apolloClient.cache.extract(),
     },
   };
 };
