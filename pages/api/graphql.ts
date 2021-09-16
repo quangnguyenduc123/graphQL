@@ -1,7 +1,7 @@
-import { ApolloServer, gql } from 'apollo-server-micro';
-import mysql from 'serverless-mysql';
-import { OkPacket } from 'mysql';
-import { Resolvers, TaskStatus } from '../../generated/graphql-backend';
+import { ApolloServer, gql } from "apollo-server-micro";
+import mysql from "serverless-mysql";
+import { OkPacket } from "mysql";
+import { Resolvers, TaskStatus } from "../../generated/graphql-backend";
 
 const typeDefs = gql`
   enum TaskStatus {
@@ -53,10 +53,10 @@ const resolvers: Resolvers<ApolloContext> = {
   Query: {
     async tasks(parent, args, context) {
       const { status } = args;
-      let query = 'SELECT id, title, task_status FROM tasks';
+      let query = "SELECT id, title, task_status FROM tasks";
       const queryParams: string[] = [];
       if (status) {
-        query += ' WHERE task_status = ?';
+        query += " WHERE task_status = ?";
         queryParams.push(status);
       }
       const tasks = await context.db.query<TasksDbQueryResult>(
@@ -77,7 +77,7 @@ const resolvers: Resolvers<ApolloContext> = {
   Mutation: {
     async createTask(parent, args, context) {
       const result = await context.db.query<OkPacket>(
-        'INSERT INTO tasks (title, task_status) VALUES(?, ?)',
+        "INSERT INTO tasks (title, task_status) VALUES(?, ?)",
         [args.input.title, TaskStatus.Active]
       );
       return {
@@ -112,4 +112,4 @@ export const config = {
   },
 };
 
-export default apolloServer.createHandler({ path: '/api/graphql' });
+export default apolloServer.createHandler({ path: "/api/graphql" });
