@@ -2,9 +2,11 @@ import { GraphQLServer } from 'graphql-yoga'
 
 // Type defnitions(schema)
 const typeDefs = `
-    type Query{
+    type Query {
+        greeting(name: String!): String!
         user: User!
         post: Post!
+        add(a: Int!, b: Int!): Int!
     }
 
     type User {
@@ -24,6 +26,15 @@ const typeDefs = `
 // Resolvers
 const resolvers = {
     Query: {
+        add(parents, args, ctx, info) {
+            return args.a + args.b
+        },
+        greeting(parents, args, ctx, info) {
+            console.log(parents)
+            console.log(ctx)
+            console.log(info)
+            return `Hello ${args.name}`
+        },
         user() {
             return { id: '1', name: 'quang', age: '25' }
         },
