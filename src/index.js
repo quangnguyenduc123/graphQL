@@ -1,6 +1,39 @@
 import { GraphQLServer } from 'graphql-yoga'
 
-const users = [{ id: '1', name: 'quang', age: '25' }, { id: '2', name: 'dai', age: '25' }]
+const users = [{
+    id: '1',
+    name: 'Andrew',
+    email: 'andrew@example.com',
+    age: 27
+}, {
+    id: '2',
+    name: 'Sarah',
+    email: 'sarah@example.com'
+}, {
+    id: '3',
+    name: 'Mike',
+    email: 'mike@example.com'
+}]
+
+const posts = [{
+    id: '10',
+    title: 'GraphQL 101',
+    body: 'This is how to use GraphQL...',
+    published: true,
+    author: '1'
+}, {
+    id: '11',
+    title: 'GraphQL 201',
+    body: 'This is an advanced GraphQL post...',
+    published: false,
+    author: '1'
+}, {
+    id: '12',
+    title: 'Programming Music',
+    body: '',
+    published: false,
+    author: '2'
+}]
 // Type defnitions(schema)
 const typeDefs = `
     type Query {
@@ -23,6 +56,7 @@ const typeDefs = `
         title: String!
         body: String!
         published: Boolean!
+        author: User!
     }
 `
 // Resolvers
@@ -41,7 +75,7 @@ const resolvers = {
             return { id: '1', name: 'quang', age: '25' }
         },
         post() {
-            return { id: '1', title: 'post1', body: 'Hay vl', published: true }
+            return posts[0]
         },
         users(parents, args, ctx, info) {
             if (!args.query) {
@@ -49,6 +83,13 @@ const resolvers = {
             }
             return users.filter((user) => {
                 return user.name.toLocaleLowerCase().includes(args.query.toLocaleLowerCase())
+            })
+        }
+    },
+    Post: {
+        author(parent, args, ctx, info) {
+            return users.find((user) => {
+                return user.id === parent.author
             })
         }
     }
